@@ -7,11 +7,13 @@ require dirname(__FILE__).'/../vendor/autoload.php';
 require dirname(__FILE__).'/services/AdminService.php';
 require dirname(__FILE__).'/services/ManufacturerService.php';
 require dirname(__FILE__).'/services/OrdersService.php';
-
+require dirname(__FILE__).'/services/PaymentsService.php';
+require dirname(__FILE__).'/services/ProductsService.php';
+require dirname(__FILE__).'/services/TypeService.php';
 
 
 //routes
-require_once dirname(__FILE__).'/routes/MovieRoutes.php';
+require_once dirname(__FILE__).'/routes/AdminRoutes.php';
 require_once dirname(__FILE__).'/routes/ManufacturerRoutes.php';
 require_once dirname(__FILE__).'/routes/OrdersRoutes.php';
 require_once dirname(__FILE__).'/routes/PaymentsRoutes.php';

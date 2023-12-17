@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require_once dirname(__FILE__).'/../Config.class.php';
+require_once __DIR__.'/../Config.class.php';
 
 class BaseDao {
     private $connection;

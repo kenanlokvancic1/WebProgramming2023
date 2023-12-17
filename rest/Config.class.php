@@ -17,9 +17,9 @@ class Config
         return Config::getEnv("DB_PASSWORD", "");
     }
 
-    public static function DB_SCHEME()
+    public static function DB_SCHEMA()
     {
-        return Config::getEnv("DB_SCHEME", "storage");
+        return Config::getEnv("DB_SCHEMA", "storage");
     }
 
     public static function DB_PORT()
