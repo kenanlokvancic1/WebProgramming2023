@@ -19,7 +19,7 @@ var ProductsService = {
                 html+=`
                 <div class="col-lg-3">
                 <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbanner2.kisspng.com%2F20180422%2Fvzq%2Fkisspng-drawing-book-sketch-5adcf25816d295.9076212715244294000935.jpg&f=1&nofb=1" alt="Card image cap">
+                    <img class="card-img-top" src="https://www.shutterstock.com/image-vector/pc-components-cpu-gpu-motherboard-600nw-2155566795.jpg" alt="Card image cap">
                     <div class="card-body">
                     <h4 class="card-title">` + data[i].product_desc + ` ` + data[i].type_id + ` ` + data[i].manufacturer_id + `</h4>
                         <h5 class="card-title">`+data[i].price+`</h5>
