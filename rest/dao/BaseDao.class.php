@@ -8,12 +8,12 @@ error_reporting(E_ALL);
 require_once __DIR__.'/../Config.class.php';
 
 class BaseDao {
-    private $connection;
-    private $table;
+    protected $connection;
+    private $table_name;
 
-    public function __construct($table) {
+    public function __construct($table_name) {
         try {
-            $this -> table = $table;
+            $this -> table = $table_name;
             $hostname = Config::DB_HOST();
             $schema = Config::DB_SCHEMA();
             $username = Config::DB_USERNAME();
@@ -27,57 +27,99 @@ class BaseDao {
             echo "Error: " . $e -> getMessage();
         }
     }
-
-    public function add($entity){
-        $query = "INSERT INTO " . $this -> table . " (";
-        foreach($entity as $column => $value){
-            $query .= $column . ", ";
-        }
-        $query = substr($query, 0, -2);
-        $query .= ") VALUES (";
-        foreach($entity as $column => $value){
-            $query .= ":" . $column . ", ";
-        }
-        $query = substr($query, 0, -2);
-        $query .= ")";
+    public function getAll(){ 
+        $stmt = $this->conn->prepare("SELECT * FROM ".$this->table_name);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      }
+  
+      /**
+       *  Function returns elements by ID
+       */
+      
+      public function getByID($id){ 
+      $stmt = $this->conn->prepare("SELECT * FROM ".$this->table_name." WHERE id = :id");
+      $stmt->execute(['id' => $id]);
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return reset($result);
+      }
+  
+      /**
+       * Function for inserting new data into a table
+       * Made through string concatination
+       */
+      protected function exec_add($params){
+        //INSERT INTO Users(User_Name, User_Last_Name, User_email, User_Role) 
+        //VALUES (Nihad, Sevelija, nidjo@suveli.wtf, babo)
         
-        $statement = $this->connection -> prepare($query);
-        $statement -> execute($entity);
-        $entity["id"] = $this->connection -> lastInsertId();
-        return $entity;
-    }
-
-    public function get() {
-        $query = $this -> connection -> prepare("SELECT * FROM " . $this -> table);
-        $query -> execute();
-        return $query -> fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function get_by_id($id) {
-        $query = $this -> connection -> prepare("SELECT * FROM " . $this -> table . " WHERE id = :id");
-        $query -> bindParam(":id", $id);
-        $query -> execute();
-        return $query -> fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function update($entity, $id, $id_column = "id") {
-        $query = "UPDATE " . $this -> table . " SET ";
-        foreach($entity as $column => $value) {
-            $query .= $column . "=:" . $column . ", ";
+        $stmt = "INSERT INTO ".$this->table_name." (";
+        foreach($params as $key=>$value){
+        $stmt .= " ".$key.",";
         }
-
-        $query = substr($query, 0, -2);
-        $query .= " WHERE {$id_column} = :id";
-        $entity["id"] = $id;
-        $statement = $this -> connection -> prepare($query);
-        $statement -> execute($entity);
-    }
-
-    public function delete($id) {
-        $query = $this -> connection -> prepare("DELETE FROM " .$this -> table . " WHERE id = :id");
-        $query -> bindParam(":id", $id);
-        $query -> execute();
-    }
+        $stmt = substr($stmt,0,-1);
+        $stmt .= ") VALUES (";
+        foreach($params as $key=>$value){
+        $stmt .= " :".$key.",";
+        }
+        $stmt = substr($stmt,0,-1);
+        $stmt .= ")";
+        $this->conn->prepare($stmt)->execute($params);
+        $params['id'] = $this->conn->lastInsertId();
+        return $params;
+      }
+  
+      /** 
+       *  Function for deleting data from a table
+      */
+      public function delete($id){
+        $stmt = $this->conn->prepare("DELETE FROM ".$this->table_name." WHERE id=:id");
+        $stmt->bindParam(':id',$id);
+        $stmt->execute();
+      }
+  
+      /**
+       *  Function for updating data in a table
+       */
+      protected function execUpdate($params,$id){
+        /** UPDATE table_name
+          * SET column1=value, column2=value2,...
+          * WHERE some_column=some_value
+          * UPDATE $table SET (col1=val1,col2=val2,..) WHERE id=$id  
+         */
+        $stmt = "UPDATE ".$this->table_name." SET ";
+        foreach($params as $key=>$value){
+            $stmt .= " " .$key ." = :". $key .", ";
+        }
+        $stmt = substr($stmt,0,-2);
+        $stmt .= " WHERE id=$id";
+        $result = $this->conn->prepare($stmt);
+        $result->execute($params);
+      }
+  
+      /**
+       *  Used for sending a query with its paramaters
+       */
+      protected function query($query, $params){
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute($params);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      }
+  
+      /**
+       *  Used for sending a query for unique entries in the database
+      */
+      protected function queryUnique($query, $params){
+      $results = $this->query($query,$params);
+      return reset($results);
+    } 
+  
+      public function add($params){
+        $this->exec_add($params);
+      }
+  
+      public function update($params, $id){
+        $this->execUpdate($params, $id);
+      }
 }
 ?>
 ?>

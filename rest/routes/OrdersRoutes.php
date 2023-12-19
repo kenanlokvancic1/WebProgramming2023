@@ -1,25 +1,32 @@
 <?php
+Flight::route('GET /orders',function(){
+    Flight::json(Flight::ordersDao()->getAll());
+});
+
+/**
+ *  Returns one from the table by ID
+ */
+Flight::route('GET /orders/@id',function($id){
+    Flight::json(Flight::ordersDao()->getByID($id));
+});
+
+/**
+ *  Adds new data to the table
+ */
 Flight::route('POST /orders', function(){
-    $data = Flight::request()->data->getData();
-    Flight::json(Flight::ordersService()->add($data));
+    $request=Flight::request();
+    Flight::ordersDao()->add($request->data->getData());
+    Flight::json(['message' => 'updated']);
 });
 
-Flight::route('GET /orders', function(){
-    Flight::json(Flight::ordersService()->get());
+Flight::route('PUT /orders/@id',function($id){
+    $request=Flight::request();
+    Flight::ordersDao()->update($request->data->getData(),$id);
+    Flight::json(['message' => 'updated']);
 });
 
-Flight::route('GET /orders/@id', function($id){
-    Flight::json(Flight::ordersService()->get_by_id($id));
-});
-
-Flight::route('PUT /orders/@id', function($id){
-    $data = Flight::request()->data->getData();
-    Flight::ordersService()->update($data, $id);
-    Flight::json(array("message" => "orders updated successfully"));
-});
-
-Flight::route('DELETE /orders/@id', function($id){
-    Flight::ordersService()->delete($id);
-    Flight::json(["message" => "orders deleted successfully"]);
+Flight::route('DELETE /orders/@id',function($id){
+    Flight::ordersDao()->delete($id);
+    Flight::json(['message'=>'deleted']);
 });
 ?>

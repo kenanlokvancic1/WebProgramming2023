@@ -5,6 +5,12 @@ class AdminDao extends BaseDao {
     public function __construct(){
         parent::__construct("admin");
     }
+
+
+    public function getAdminByEmail($email){
+        return $this->queryUnique("Select * FROM Admin WHERE email=:email",['email'=>$email]);
+    }
+
 }
 
 

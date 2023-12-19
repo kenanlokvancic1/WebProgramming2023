@@ -1,15 +1,20 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 require dirname(__FILE__).'/../vendor/autoload.php';
 
 
-
 //services
-require dirname(__FILE__).'/services/AdminService.php';
-require dirname(__FILE__).'/services/ManufacturerService.php';
-require dirname(__FILE__).'/services/OrdersService.php';
-require dirname(__FILE__).'/services/PaymentsService.php';
-require dirname(__FILE__).'/services/ProductsService.php';
-require dirname(__FILE__).'/services/TypeService.php';
+require dirname(__FILE__).'/services/AdminService.class.php';
+require dirname(__FILE__).'/services/ManufacturerService.class.php';
+require dirname(__FILE__).'/services/OrdersService.class.php';
+require dirname(__FILE__).'/services/PaymentsService.class.php';
+require dirname(__FILE__).'/services/ProductsService.class.php';
+require dirname(__FILE__).'/services/TypeService.class.php';
 
 
 //routes
@@ -28,6 +33,14 @@ Flight::register('ordersService', 'OrdersService');
 Flight::register('paymentsService', 'PaymentsService');
 Flight::register('productsService', 'ProductsService');
 Flight::register('typeService', 'TypeService');
+
+//dao
+Flight::register('adminDao','AdminDao');
+Flight::register('manufacturerDao','ManufacturerDao');
+Flight::register('ordersDao','OrdersDao');
+Flight::register('paymentsDao','PaymentsDao');
+Flight::register('productsDao','ProductsDao');
+Flight::register('typeDao','TypeDao');
 
 
 Flight::start();
