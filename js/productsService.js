@@ -10,9 +10,13 @@ var ProductsService = {
     },
 
     list: function(){
-        $.get('rest/products',function(data){
-            $("#products-list").html("");
-            console.log(data);
+      $.ajax({
+        url: "rest/products",
+        type: "GET",
+        beforeSend: function(xhr){
+          xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+        },
+        success: function(data){
             var html="";
             for(let i=0;i<data.length;i++){
       
@@ -33,12 +37,24 @@ var ProductsService = {
                     </div>`;
             }
             $("#products-list").html(html);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          toastr.error(XMLHttpRequest.responseJSON.message);
+          usersService.logout();
+        }
         });
     },
 
     get: function(id){
         $(".products-button").attr("disabled",true);
-        $.get('rest/poducts/'+id,function(data){
+        $.ajax({
+          url: "rest/products/"+id,
+          type: "GET",
+          beforeSend: function(xhr){
+            xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+          },
+          success: function(data){
+            console.log(data);
             console.log(data);
             //$("#exampleModal .modal-body").html(id);
             $("#id").val(data.id);
@@ -48,6 +64,11 @@ var ProductsService = {
             $("#manufacturerID").val(data.manufacturer_id);
             $("#exampleModal").modal("show")
             $(".products-button").attr("disabled",false);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          toastr.error(XMLHttpRequest.responseJSON.message);
+          usersService.logout();
+        }
         })
     },
 
@@ -58,6 +79,9 @@ var ProductsService = {
             data:JSON.stringify(products),
             contentType:'application/json',
             dataType:'json',
+            beforeSend: function(xhr){
+              xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+            },
             success:function(result){
               $('#products-list').html(`<div id="products-list" class="row">
                     <div class="d-flex justify-content-center">
@@ -78,6 +102,9 @@ var ProductsService = {
     $.ajax({
       url:'rest/products/'+id,
       type:'DELETE',
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
       success: function(result){
         $('#products-list').html(`<div id="products-list" class="row">
               <div class="d-flex justify-content-center">
@@ -87,6 +114,10 @@ var ProductsService = {
               </div>
           </div>`)
           ProductsService.list();
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        toastr.error(XMLHttpRequest.responseJSON.message);
+        usersService.logout();
       }
     })
     },
@@ -105,6 +136,9 @@ var ProductsService = {
           data:JSON.stringify(products),
           contentType:'application/json',
           dataType:'json',
+          beforeSend: function(xhr){
+            xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+          },
           success: function(result){
             $("#exampleModal").modal("hide");
             $(".products-button").attr("disabled",false);

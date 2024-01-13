@@ -1,5 +1,8 @@
 <?php
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -41,6 +44,29 @@ Flight::register('ordersDao','OrdersDao');
 Flight::register('paymentsDao','PaymentsDao');
 Flight::register('productsDao','ProductsDao');
 Flight::register('typeDao','TypeDao');
+
+
+
+Flight::route('/*', function(){
+
+    $path = Flight::request()->url;
+    if ($path == '/login') return TRUE;
+  
+    $headers = getallheaders();
+    if (@!$headers['Authorization']){
+      Flight::json(["message" => "Authorization is missing"], 403);
+      return FALSE;
+    }else{
+      try {
+        $decoded = (array)JWT::decode($headers['Authorization'], new Key(Config::JWT_SECRET(), 'HS256'));
+        Flight::set('user', $decoded);
+        return TRUE;
+      } catch (\Exception $e) {
+        Flight::json(["message" => "Authorization token is not valid"], 403);
+        return FALSE;
+      }
+    }
+  });
 
 
 Flight::start();
