@@ -8,4 +8,3 @@ class OrdersService extends BaseService{
         parent::__construct(new OrdersDao());
     }
 }
-?>

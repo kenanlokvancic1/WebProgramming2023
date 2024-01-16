@@ -8,4 +8,3 @@ class ManufacturerService extends BaseService{
         parent::__construct(new ManufacturerDao());
     }
 }
-?>

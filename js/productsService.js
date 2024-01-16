@@ -16,31 +16,35 @@ var ProductsService = {
         beforeSend: function(xhr){
           xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
         },
+
         success: function(data){
+            console.log("test")
             var html="";
+        
             for(let i=0;i<data.length;i++){
       
-                html+=`
-                <div class="col-lg-3">
+              html+=`
+              <div class="col-lg-3">
                 <div class="card" style="width: 18rem;">
                     <img class="card-img-top" src="https://www.shutterstock.com/image-vector/pc-components-cpu-gpu-motherboard-600nw-2155566795.jpg" alt="Card image cap">
                     <div class="card-body">
-                    <h4 class="card-title">` + data[i].product_desc + ` ` + data[i].type_id + ` ` + data[i].manufacturer_id + `</h4>
-                        <h5 class="card-title">`+data[i].price+`</h5>
+                      <h4 class="card-title">` + data[i].product_desc + `</h4>
+                        <h5 class="card-title">Price: `+data[i].price+`</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-primary products-button" onclick="ProductsService.get(`+data[i].id+`)">View Info</button>
                             <button type="button" class="btn btn-danger products-button" onclick="ProductsService.delete(`+data[i].id+`)">Delete</button>
                         </div>
                     </div>
-                    </div>
-                    </div>`;
+                  </div>
+                </div>`;
             }
+            
             $("#products-list").html(html);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-          toastr.error(XMLHttpRequest.responseJSON.message);
-          usersService.logout();
+          //toastr.error(XMLHttpRequest.responseJSON.message);
+          adminService.logout();
         }
         });
     },
@@ -56,18 +60,18 @@ var ProductsService = {
           success: function(data){
             console.log(data);
             console.log(data);
-            //$("#exampleModal .modal-body").html(id);
+            $("#exampleModal .modal-body").html(id);
             $("#id").val(data.id);
-            $("#productDesc").val(data.product_desc);
+            $("#product_desc").val(data.product_desc);
             $("#price").val(data.price);
-            $("#typeID").val(data.type_id);
-            $("#manufacturerID").val(data.manufacturer_id);
+            $("#type_id").val(data.type_id);
+            $("#manufacturer_id").val(data.manufacturer_id);
             $("#exampleModal").modal("show")
             $(".products-button").attr("disabled",false);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
           toastr.error(XMLHttpRequest.responseJSON.message);
-          usersService.logout();
+          adminService.logout();
         }
         })
     },
@@ -79,7 +83,9 @@ var ProductsService = {
             data:JSON.stringify(products),
             contentType:'application/json',
             dataType:'json',
+
             beforeSend: function(xhr){
+              console.log(products)
               xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
             },
             success:function(result){
@@ -117,7 +123,7 @@ var ProductsService = {
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         toastr.error(XMLHttpRequest.responseJSON.message);
-        usersService.logout();
+        adminService.logout();
       }
     })
     },

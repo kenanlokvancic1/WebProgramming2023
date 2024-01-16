@@ -56,4 +56,3 @@ Flight::route('DELETE /manufacturer/@id', function($id){
     Flight::manufacturerService()->delete($id);
     Flight::json(["message" => "manufacturer deleted successfully"]);
 });
-?>

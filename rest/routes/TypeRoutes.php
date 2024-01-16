@@ -56,4 +56,3 @@ Flight::route('DELETE /type/@id', function($id){
     Flight::typeService()->delete($id);
     Flight::json(["message" => "type deleted successfully"]);
 });
-?>

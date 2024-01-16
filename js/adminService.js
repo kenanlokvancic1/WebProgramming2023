@@ -26,7 +26,9 @@ var adminService = {
             window.location.replace("index.html");
           },
           error: function(XMLHttpRequest, textStatus, errorThrown) {
-            toastr.error(XMLHttpRequest.responseJSON.message);
+
+            console.log(errorThrown)
+            // toastr.error(XMLHttpRequest.responseJSON.message);
           }
         });
     },

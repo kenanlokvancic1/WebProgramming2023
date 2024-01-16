@@ -61,4 +61,28 @@ Flight::route('DELETE /admin/@id', function($id){
     Flight::adminService()->delete($id);
     Flight::json(["message" => "admin deleted successfully"]);
 });
-?>
+
+
+
+Flight::route('POST /login',function(){
+    $login = Flight::request()->data->getData();
+
+    $user = Flight::adminService()->getAdminByEmail($login['email']);
+
+    if(isset($user['id'])){
+
+        if($user['password'] == md5($login['password'])){ // md5 hash compatible
+            
+            unset($user['password']); //Deletes pw from user object so that it isn't encoded inside of the token
+            $jwt = JWT::encode($user, Config::JWT_SECRET(), 'HS256');
+            Flight::json(['token' => $jwt]);
+
+        }else{
+            
+            Flight::json(["message" => "Incorrect password"], 404);
+        }
+    }else{
+        
+        Flight::json(["message" => "User doesn't exist"], 404);
+    }
+});

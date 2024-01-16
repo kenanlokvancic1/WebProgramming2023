@@ -8,4 +8,3 @@ class TypeService extends BaseService{
         parent::__construct(new TypeDao());
     }
 }
-?>

@@ -60,4 +60,3 @@ Flight::route('DELETE /orders/@id',function($id){
     Flight::ordersService()->delete($id);
     Flight::json(['message'=>'deleted']);
 });
-?>

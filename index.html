@@ -49,11 +49,7 @@
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addElement"> Add item </button>
           </div>
             <div id="products-list" class="row">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                      <span class="sr-only"></span>
-                    </div>
-                </div>
+                
             </div>
           </div>
     </main>
@@ -64,6 +60,7 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/jquery.validate.min.js"></script>
 <script src="js/productsService.js"></script>
+<script src="js/adminService.js"></script>
 
 
 <!--Modals-->
@@ -78,10 +75,10 @@
         </div>
         <div class="modal-body">
           <input id="id" type="hidden">
-          <input id="productDesc" type="text">
+          <input id="product_desc" type="text">
           <input id="price" type="text">
-          <input id="typeID" type="text">
-          <input id="manufacturerID" type="text">
+          <input id="type_id" type="text">
+          <input id="manufacturer_id" type="text">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -103,17 +100,17 @@
         <div class="modal-body">
             <div class="form-group">
                 <label>Product Description</label>
-                <input name="productDesc" type="text" class="form-control required" placeholder="Enter product description">
+                <input name="product_desc" type="text" class="form-control required" placeholder="Enter product description">
             </div>
 
             <div class="form-group">
                 <label>Manufacturer ID</label>
-                <input name="manufacturerID" type="number" class="form-control required" placeholder="Enter product id">
+                <input name="manufacturer_id" type="number" class="form-control required" placeholder="Enter product id">
             </div>
 
             <div class="form-group">
                 <label>Type ID</label>
-                <input name="typeID" type="number" class="form-control required" placeholder="Enter type id">
+                <input name="type_id" type="number" class="form-control required" placeholder="Enter type id">
             </div>
 
             <div class="form-group">
@@ -135,5 +132,16 @@
 
   ProductsService.init();
   
+</script>
+
+<script>
+
+  var token = localStorage.getItem("token");
+  if (token){
+    ProductsService.init();
+  }
+  else{
+    window.location.replace("login.html");
+  }
 </script>
 </html>

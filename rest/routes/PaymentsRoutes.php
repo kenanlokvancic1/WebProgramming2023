@@ -62,4 +62,3 @@ Flight::route('DELETE /payments/@id',function($id){
     Flight::paymentsService()->delete($id);
     Flight::json(['message'=>'deleted']);
 });
-?>

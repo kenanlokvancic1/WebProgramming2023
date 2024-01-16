@@ -11,4 +11,3 @@ class TypeDao extends BaseDao {
 
 
 
-?>

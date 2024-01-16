@@ -26,4 +26,3 @@ class ProductsDao extends BaseDao {
 
 
 
-?>

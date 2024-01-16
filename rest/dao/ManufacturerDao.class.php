@@ -6,4 +6,3 @@ class ManufacturerDao extends BaseDao {
         parent::__construct("manufacturer");
     }
 }
-?>

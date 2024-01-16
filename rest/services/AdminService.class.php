@@ -7,5 +7,8 @@ class AdminService extends BaseService{
     public function __construct(){
         parent::__construct(new AdminDao());
     }
+
+    public function getAdminByEmail($email){
+        return $this->dao->getAdminByEmail($email);
+    }
 }
-?>

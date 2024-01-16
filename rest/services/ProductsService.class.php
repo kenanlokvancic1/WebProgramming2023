@@ -12,4 +12,3 @@ class ProductsService extends BaseService{
         return $this->dao->get_products_with_manufacturer_names();
     }
 }
-?>

@@ -8,20 +8,20 @@ error_reporting(E_ALL);
 require_once __DIR__.'/../Config.class.php';
 
 class BaseDao {
-    protected $connection;
+    protected $conn;
     private $table_name;
 
     public function __construct($table_name) {
         try {
-            $this -> table = $table_name;
+            $this -> table_name = $table_name;
             $hostname = Config::DB_HOST();
             $schema = Config::DB_SCHEMA();
             $username = Config::DB_USERNAME();
             $password = Config::DB_PASSWORD();
             $port = Config::DB_PORT();
 
-            $this -> connection = new PDO("mysql:host=$hostname;port=$port;dbname=$schema", $username, $password);
-            $this -> connection -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this -> conn = new PDO("mysql:host=$hostname;port=$port;dbname=$schema", $username, $password);
+            $this -> conn -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         catch (PDOException $e) {
             echo "Error: " . $e -> getMessage();
@@ -121,5 +121,4 @@ class BaseDao {
         $this->execUpdate($params, $id);
       }
 }
-?>
 ?>
